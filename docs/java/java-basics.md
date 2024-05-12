@@ -1145,3 +1145,121 @@ iterate 는 add 되기 전 데이터 원본 대상으로 진행되며, 작업이
 
  * Useful link
    * https://dzone.com/articles/java-7-hashmap-vs
+
+
+# Generic
+
+### 용어
+* **제네릭(Generic) 단어**
+  + 제네릭이라는 단어는 일반적인, 범용적인이라는 영어 단어 뜻이다.
+  + 풀어보면 특정 타입에 속한 것이 아니라 일반적으로, 범용적으로 사용할 수 있다는 뜻이다.
+
+* **제네릭 타입 (Generic Type)**
+  + 클래스나 인터페이스를 정의할 때 타입 매개변수를 사용하는 것을 말한다.
+  + 제네릭 클래스, 제네릭 인터페이스를 모두 합쳐서 제네릭 타입이라 한다.
+  + 타입은 클래스, 인터페이스, 기본형( `int` 등)을 모두 합쳐서 부르는 말이다.
+  + 예: `class GenericBox<T> { private T t; }`
+  + 여기에서 `GenericBox<T>` 를 제네릭 타입이라 한다.
+
+* **타입 매개변수 (Type Parameter)**
+  + 제네릭 타입이나 메서드에서 사용되는 변수로, 실제 타입으로 대체된다.
+  + 예: `GenericBox<T>`
+  + 여기에서 `T` 를 타입 매개변수라 한다.
+
+* **타입 인자 (Type Argument)**
+  + 제네릭 타입을 사용할 때 제공되는 실제 타입이다.
+  + 예: `GenericBox<Integer>`
+  + 여기에서 `Integer` 를 타입 인자라 한다.
+
+### Naming
+타입 매개변수는 일반적인 변수명처럼 소문자로 사용해도 문제는 없다.
+하지만 일반적으로 대문자를 사용하고 용도에 맞는 단어의 첫글자를 사용하는 관례를 따른다.
+주로 사용하는 키워드는 다음과 같다.
+* E - Element
+* K - Key
+* N - Number
+* T - Type
+* V - Value
+* S,U,V etc. - 2nd, 3rd, 4th types
+
+
+### raw type (원시 타입)
+
+제네릭 타입을 사용할 때는 항상 `<>` 를 사용해서 사용시점에 원하는 타입을 지정해야 한다.
+그런데 다음과 같이 `<>` 을 지정하지 않을 수 있는데, 이런 것을 로 타입(raw type), 또는 원시 타입이라한다.
+
+```java
+GenericBox integerBox = new GenericBox();
+```
+
+원시 타입을 사용하면 내부의 타입 매개변수가 `Object` 로 사용된다고 이해하면 된다.
+
+raw type은 과거 버전과의 호환성을 제공하는 경우에만 사용되어야 한다.
+
+만약에 `Object` 타입을 사용해야 한다면 다음과 같이 타입 인자로 `Object` 를 지정해서 사용하면 된다.
+
+```java
+GenericBox<Object> integerBox = new GenericBox<>();
+```
+
+
+### 제네릭 타입 VS 제네릭 메서드
+* **제네릭 타입**
+  + 정의: `GenericClass<T>`
+  + 타입 인자 전달: 객체를 생성하는 시점
+    - 예) `new GenericClass<String>`
+
+* **제네릭 메서드**
+  + 제네릭 메서드는 클래스 전체가 아니라 특정 메서드 단위로 제네릭을 도입할 때 사용한다.
+  + 정의: `<T> T genericMethod(T t)`
+  + 타입 인자 전달: 메서드를 호출하는 시점
+    - 예) `GenericMethod.<Integer>genericMethod(i)`
+
+* 제네릭 타입은 static 메서드에 타입 매개변수를 사용할 수 없다. 제네릭 타입은 객체를 생성하는 시점에 타입이 정해진 다. 그런데 static 메서드는 인스턴스 단위가 아니라 클래스 단위로 작동하기 때문에 제네릭 타입과는 무관하다. 따라서 static 메서드에 제네릭을 도입하려면 제네릭 메서드를 사용해야 한다.
+
+
+### wildcard(?, *)
+와일드카드는 제네릭 타입이나, 제네릭 메서드를 선언하는 것이 아니다. 와일드카드는 이미 만들어진 제네릭 타입을 활용할 때 사용한다.
+
+##### **비제한 wildcard**
+
+```java
+//이것은 제네릭 메서드가 아니다. 일반적인 메서드이다.
+//Box<Dog> dogBox를 전달한다. 와일드카드 ?는 모든 타입을 받을 수 있다.
+static void printWildcardV1(Box<?> box) {
+System.out.println("? = " + box.get());
+}
+```
+
+와일드카드는 일반적인 메서드에 사용할 수 있고, 단순히 매개변수로 제네릭 타입을 받을 수 있는 것 뿐이다. 제네릭 메서드처럼 타입을 결정하거나 복잡하게 작동하지 않는다. 단순히 일반 메서드에 제네릭 타입을 받을 수 있는 매개변수가 하나 있는 것 뿐이다.
+
+제네릭 타입이나 제네릭 메서드를 정의하는게 꼭 필요한 상황이 아니라면, 더 단순한 와일드카드 사용을 권장한다.
+
+
+##### **상한 wildcard*
+
+```java
+static Animal printAndReturnWildcard(Box<? extends Animal> box) {
+  Animal animal = box.get();
+  System.out.println("이름 = " + animal.getName());
+  return animal;
+}
+```
+`printAndReturnWildcard()` 의 경우, Generic method처럼 반환타입과 인자타입을 맞추지 않아도 되고, 전달한 타입을 명확하게 반환할 수 없다(변환하지 않아도 된다). 
+
+꼭 제네릭 타입이나 제네릭 메소드를 사용해야 되는 상황이 아니면, wildecard를 사용하자.
+
+##### **하한 wildcard**
+
+```java
+static void writeBox(Box<? super Animal> box) {
+  box.set(new Dog("멍멍이", 100));
+}
+```
+
+### Type Eraser
+
+쉽게 이야기해서 컴파일 전인 `.java` 에는 제네릭의 타입 매개변수가 존재하지만, 컴파일 이
+후인 자바 바이트코드 `.class` 에는 타입 매개변수가 존재하지 않는다. 컴파일이 모두 끝나면 자바는 제네릭과 관련된 정보를 삭제되는 것이다.
+
+제네릭은 런타임에 이레이저에 의해 타입 정보가 사라진다. 따라서 런타임에 타입 정보가 필요한 생성자에 사용할 수 없다. 따라서 제네릭을 기반으로 배열을 생성하는 다음 코드는 작동하지 않고, 컴파일 오류가 발생한다. 이것은 자바가 제공하는 제네릭의 한계이다.

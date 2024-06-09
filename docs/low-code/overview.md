@@ -36,7 +36,7 @@ import 라이브러리, 이해하기 쉬운 함수/파라미터 명, 인라인 �
 * 첫 단어만
   + Command + ->
 * 첫 라인만
-  + Shift + Command + ->
+  + Control + Command +  ->
 
 
 # Code Whisperer

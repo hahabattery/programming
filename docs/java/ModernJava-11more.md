@@ -37,3 +37,10 @@ Consumer<String> testFoo = (var s) -> System.out.println("s = " + s);
 ```
 Consumer<String> testFoo = (@Nonnull var s) -> System.out.println("s = " + s);
 ```
+
+
+# record (Java14)
+[Why do we need Java Records?](https://www.digitalocean.com/community/tutorials/java-records-class)
+
+
+

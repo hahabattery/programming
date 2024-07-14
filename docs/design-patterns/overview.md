@@ -56,6 +56,14 @@ class A implements B {
 # facade and spring's slf4j
 SLF4J stands for Simple Logging Facade for Java. It provides a simple abstraction of all the logging frameworks. It enables a user to work with any of the logging frameworks such as Log4j, Logback, JUL (java.util.logging), etc. using single dependency.
 
+# DI and Design Pattern
+![](/images/programming-design/design-patterns-categorized.webp)
+Scope > Class 는 상속을 이용한 디자인 패턴이다.
+Scope > Object 은 합성을 이용한 디자인 패턴이다.
+클래스를 이용한 패턴의 경우는 숫자가 적고, 합성을 이용한 디자인 패턴이 대다수이다.
+오브젝트 합성을 이용하는 디자인 패턴을 적용할 때는 스프링의 의존관계 주입(Dependency Injection)을 사용해야지 디자인 패턴 이용이 손쉽다.
+
+
 # 디자인패턴 적용하는 방법
 
 ### java-design-patterns.com (iluwata)
